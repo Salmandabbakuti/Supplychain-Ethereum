@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Supplychain Tracking Dapp</title>
+</head>
+<body>
+  <div id="band"></div>
+  <h2>Supplychain Tracking System</h2>
+  </br>
+  <h3><marquee behavior="alternate">“In God we trust; all others bring data."</marquee></h3>
+  <h4> Secure Your Supplychain on Blockchain.</h4>
+  <div id="banner">
+    <img src="photo.png">
+  </div>
+   <div style="text-align: center;">
+   	<label><b>Create Asset:</b></label>
+<input type="text" id="assetName" placeholder=" Asset Name" required />
+<input type="text" id="assetDescription" placeholder="Description" required />
+<input type="number" id="assetUuid" placeholder="UUID" required />
+<button id="createAsset">Create Asset</button>
+</div>
+<div style="text-align: center;">
+<label><b>Transfer Asset:</b></label>
+<input type="text" id="address" placeholder="To address" required />
+<input type="number" id="Uuid" placeholder="UUID" required />
+<button id="transferAsset">Transfer Asset</button>
+</div>
+<div style="text-align: center;">
+<label><b>Track Asset Details:</b></label>
+<input type="number" id="trackUuid" placeholder="UUID" required />
+<button id="trackAsset">Track Asset Details</button>
+</div>
+</br>
+<div id = "response" style="text-align: center;">
+</div>
+<hr>
+<div id="log" style="text-align: center;"></div>
+ <link rel="stylesheet" href="index.css">
+<script src="web3.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script>
+	 function log(message) {
+    $('#log').append($('<p>').text(message));
+    $('#log').scrollTop($('#log').prop('scrollHeight'));
+  }
+  function error(message) {
+    $('#log').append($('<p>').addClass('dark-red').text(message));
+    $('#log').scrollTop($('#log').prop('scrollHeight'));
+  }
+  function waitForReceipt(hash, cb) {
+    web3.eth.getTransactionReceipt(hash, function (err, receipt) {
+      if (err) {
+        error(err);
+      }
+      if (receipt !== null) {
+        // Transaction went through
+        if (cb) {
+          cb(receipt);
+        }
+      } else {
+        // Try again in 1 second
+        window.setTimeout(function () {
+          waitForReceipt(hash, cb);
+        }, 1000);
+      }
+    });
+  }
+  const address = "0xc93db518ae7dd6ce224046f5e0fe33ce4b89263d";
+  const abi = [{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"uuid","type":"string"}],"name":"createAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"uuid","type":"string"}],"name":"transferAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"manufacturer","type":"address"}],"name":"AssetCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"}],"name":"AssetTransfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectTransfer","type":"event"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetDetails","outputs":[{"name":"Name","type":"string"},{"name":"Description","type":"string"},{"name":"Manufacturer","type":"address"},{"name":"Location","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}];
+  $(function () {
+    var supplychain;
+    $('#trackAsset').click(function (e) {
+      e.preventDefault();
+      supplychain.assetDetails.call(document.getElementById("trackUuid").value, function (err, result) {
+        if (err) {
+          return error(err);
+        } 
+        // The return value is a BigNumber object
+        document.getElementById("response").innerHTML = result;
+      });
+    });
+    $('#createAsset').click(function (e) {
+      e.preventDefault();
+      if(web3.eth.defaultAccount === undefined) {
+        return error("No accounts found. If you're using MetaMask, " +
+                     "please unlock it first and reload the page.");
+      }
+      log("Transaction On its Way...");
+      supplychain.createAsset.sendTransaction(document.getElementById("assetName").value,document.getElementById("assetDescription").value,document.getElementById("assetUuid").value,function (err, hash) {
+        if (err) {
+          return error(err);
+        }
+        waitForReceipt(hash, function () {
+          log("Transaction succeeded.");
+        });
+      });
+    });
+    $('#transferAsset').click(function (e) {
+      e.preventDefault();
+      if(web3.eth.defaultAccount === undefined) {
+        return error("No accounts found. If you're using MetaMask, " +
+                     "please unlock it first and reload the page.");
+      }
+      log("Transaction On its Way...");
+      supplychain.transferAsset.sendTransaction(document.getElementById("address").value,document.getElementById("Uuid").value,function (err, hash) {
+        if (err) {
+          return error(err);
+        }
+        waitForReceipt(hash, function () {
+          log("Transaction succeeded.");
+        });
+      });
+    });
+    if (typeof(web3) === "undefined") {
+      error("Unable to find web3. " +
+            "Please run MetaMask (or something else that injects web3).");
+    } else {
+      log("Found injected web3.");
+      web3 = new Web3(web3.currentProvider);
+      ethereum.enable();
+      if (web3.version.network == 3) {
+        error("Wrong network detected. Please switch to the Ropsten test network.");
+      } else {
+        log("Connected to the Ropsten test network.");
+        supplychain = web3.eth.contract(abi).at(address);
+        }
+    }
+  });
+</script>
+</body>
+</html>
