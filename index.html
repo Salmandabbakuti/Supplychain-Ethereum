@@ -32,6 +32,10 @@
 </div>
 </br>
 <div id = "response" style="text-align: center;">
+<p><b>Name:</b><span id="name">??</span></p>
+<p><b>Description:</b><span id="description">??</span></p>
+<p><b>Manufacturer:</b><span id="manufacturer">??</span></p>
+<p><b>Location:</b><span id="location">??</span></p>
 </div>
 <hr>
 <div id="log" style="text-align: center;"></div>
@@ -66,18 +70,48 @@
       }
     });
   }
-  const address = "0xc93db518ae7dd6ce224046f5e0fe33ce4b89263d";
-  const abi = [{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"uuid","type":"string"}],"name":"createAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"uuid","type":"string"}],"name":"transferAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"manufacturer","type":"address"}],"name":"AssetCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"}],"name":"AssetTransfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectTransfer","type":"event"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetDetails","outputs":[{"name":"Name","type":"string"},{"name":"Description","type":"string"},{"name":"Manufacturer","type":"address"},{"name":"Location","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}];
+  const address = "0xc4c9994c7b1f767050b94dccf975d0b4096580f6";
+  const abi = [{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"uuid","type":"string"}],"name":"createAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"uuid","type":"string"}],"name":"transferAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"manufacturer","type":"address"}],"name":"AssetCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"}],"name":"AssetTransfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectTransfer","type":"event"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetDescription","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetLocation","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetManufacturer","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"}];
   $(function () {
     var supplychain;
     $('#trackAsset').click(function (e) {
       e.preventDefault();
-      supplychain.assetDetails.call(document.getElementById("trackUuid").value, function (err, result) {
+      supplychain.assetName.call(document.getElementById("trackUuid").value, function (err, result1) {
         if (err) {
           return error(err);
         } 
         // The return value is a BigNumber object
-        document.getElementById("response").innerHTML = result;
+        document.getElementById("name").innerHTML = result1;
+      });
+    });
+    $('#trackAsset').click(function (e) {
+      e.preventDefault();
+            supplychain.assetDescription.call(document.getElementById("trackUuid").value, function (err, result2) {
+        if (err) {
+          return error(err);
+        } 
+        // The return value is a BigNumber object
+        document.getElementById("description").innerHTML = result2;
+      });
+     });
+     $('#trackAsset').click(function (e) {
+      e.preventDefault();
+      supplychain.assetManufacturer.call(document.getElementById("trackUuid").value, function (err, result3) {
+        if (err) {
+          return error(err);
+        } 
+        // The return value is a BigNumber object
+        document.getElementById("manufacturer").innerHTML = result3;
+      });
+     });
+     $('#trackAsset').click(function (e) {
+      e.preventDefault();
+       supplychain.assetLocation.call(document.getElementById("trackUuid").value, function (err, result4) {
+        if (err) {
+          return error(err);
+        } 
+        // The return value is a BigNumber object
+        document.getElementById("location").innerHTML = result4;
       });
     });
     $('#createAsset').click(function (e) {
