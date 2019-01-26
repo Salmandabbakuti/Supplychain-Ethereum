@@ -107,7 +107,7 @@ function log(message) {
       log("Found injected web3.");
       web3 = new Web3(web3.currentProvider);
       ethereum.enable();
-      if (web3.version.network == 3) {
+      if (web3.version.network != 3) {
         error("Wrong network detected. Please switch to the Ropsten test network.");
       } else {
         log("Connected to the Ropsten test network.");
