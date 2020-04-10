@@ -24,48 +24,228 @@ function log(message) {
       }
     });
   }
-  const address = "0xc4c9994c7b1f767050b94dccf975d0b4096580f6";
-  const abi = [{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"uuid","type":"string"}],"name":"createAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"uuid","type":"string"}],"name":"transferAsset","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"manufacturer","type":"address"}],"name":"AssetCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectCreate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"}],"name":"AssetTransfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"uuid","type":"string"},{"indexed":false,"name":"message","type":"string"}],"name":"RejectTransfer","type":"event"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetDescription","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetLocation","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetManufacturer","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"string"}],"name":"assetName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"}];
-  $(function () {
-    var supplychain;
+  const address = "0xafee82fDAe28D3404cE3De18A62cCA28Acb974C7";
+  const abi = [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "manufacturer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "location",
+          "type": "address"
+        }
+      ],
+      "name": "AssetCreate",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        }
+      ],
+      "name": "AssetTransfer",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        }
+      ],
+      "name": "createAsset",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        }
+      ],
+      "name": "transferAsset",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        }
+      ],
+      "name": "names",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        }
+      ],
+      "name": "getAssetLocation",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        }
+      ],
+      "name": "Descriptions",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "uuid",
+          "type": "string"
+        }
+      ],
+      "name": "Manufacturers",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ];
+   $(function () {
+    var AssetTracker;
     $('#trackAsset').click(function (e) {
       e.preventDefault();
-      supplychain.assetName.call(document.getElementById("trackUuid").value, function (err, result1) {
+      AssetTracker.names.call(document.getElementById("trackUuid").value, function (err, re) {
         if (err) {
           return error(err);
         } 
         // The return value is a BigNumber object
-        document.getElementById("name").innerHTML = result1;
+        document.getElementById("name").innerHTML = re ;
       });
     });
     $('#trackAsset').click(function (e) {
       e.preventDefault();
-            supplychain.assetDescription.call(document.getElementById("trackUuid").value, function (err, result2) {
+            AssetTracker.Descriptions.call(document.getElementById("trackUuid").value, function (err, res) {
         if (err) {
           return error(err);
         } 
         // The return value is a BigNumber object
-        document.getElementById("description").innerHTML = result2;
+       document.getElementById("description").innerHTML = res;
       });
      });
      $('#trackAsset').click(function (e) {
       e.preventDefault();
-      supplychain.assetManufacturer.call(document.getElementById("trackUuid").value, function (err, result3) {
+      AssetTracker.Manufacturers.call(document.getElementById("trackUuid").value, function (err, resul) {
         if (err) {
           return error(err);
         } 
         // The return value is a BigNumber object
-        document.getElementById("manufacturer").innerHTML = result3;
+        document.getElementById("manufacturer").innerHTML = resul ;
       });
      });
      $('#trackAsset').click(function (e) {
       e.preventDefault();
-       supplychain.assetLocation.call(document.getElementById("trackUuid").value, function (err, result4) {
+       AssetTracker.getAssetLocation.call(document.getElementById("trackUuid").value, function (err, resu) {
         if (err) {
           return error(err);
         } 
         // The return value is a BigNumber object
-        document.getElementById("location").innerHTML = result4;
+       document.getElementById("location").innerHTML = resu;
       });
     });
     $('#createAsset').click(function (e) {
@@ -75,7 +255,7 @@ function log(message) {
                      "please unlock it first and reload the page.");
       }
       log("Transaction On its Way...");
-      supplychain.createAsset.sendTransaction(document.getElementById("assetName").value,document.getElementById("assetDescription").value,document.getElementById("assetUuid").value,function (err, hash) {
+      AssetTracker.createAsset.sendTransaction(document.getElementById("assetName").value,document.getElementById("assetDescription").value,document.getElementById("assetUuid").value,function (err, hash) {
         if (err) {
           return error(err);
         }
@@ -91,7 +271,7 @@ function log(message) {
                      "please unlock it first and reload the page.");
       }
       log("Transaction On its Way...");
-      supplychain.transferAsset.sendTransaction(document.getElementById("address").value,document.getElementById("Uuid").value,function (err, hash) {
+      AssetTracker.transferAsset.sendTransaction(document.getElementById("address").value,document.getElementById("Uuid").value,function (err, hash) {
         if (err) {
           return error(err);
         }
@@ -107,11 +287,11 @@ function log(message) {
       log("Found injected web3.");
       web3 = new Web3(web3.currentProvider);
       ethereum.enable();
-      if (web3.version.network != 3) {
+      if (web3.version.network != 4) {
         error("Wrong network detected. Please switch to the Ropsten test network.");
       } else {
         log("Connected to the Ropsten test network.");
-        supplychain = web3.eth.contract(abi).at(address);
+        AssetTracker = web3.eth.contract(abi).at(address);
         }
     }
   });
