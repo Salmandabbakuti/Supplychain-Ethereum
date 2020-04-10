@@ -33,14 +33,21 @@
         emit AssetTransfer(msg.sender, to, uuid);
                }
                
-          function getAssetDetails(string memory uuid)public view returns (string memory,string memory,address) {
+          function names(string memory uuid)public view returns (string memory) {
  
-               return (assetStore[uuid].name, assetStore[uuid].description, assetStore[uuid].manufacturer);
+               return (assetStore[uuid].name);
                    }
           function getAssetLocation(string memory uuid)public view returns (address) {
  
             return (locations[uuid].location);
                   }
-
-         
+          function Descriptions(string memory uuid)public view returns (string memory) {
+ 
+            return (assetStore[uuid].description);
+                  }
+          function Manufacturers(string memory uuid)public view returns (address) {
+ 
+            return (assetStore[uuid].manufacturer);
+                  }
+     
        }
